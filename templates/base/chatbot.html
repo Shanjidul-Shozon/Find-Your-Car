@@ -1,0 +1,121 @@
+{% extends "base/base.html" %}
+
+{% block start %}
+<head>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+    
+    #chat-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    #chat-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    #chat-list li {
+        margin-bottom: 10px;
+    }
+    
+    #chat-input-container {
+        margin-top: 10px;
+        display: flex;
+    }
+    
+    #chat-input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+    }
+    
+    #chat-send-btn {
+        padding: 10px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    </style>
+    </head>
+    <body>
+        <div id="chat-container">
+            <ul id="chat-list"></ul>
+            <div id="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type your message..." />
+                <button id="chat-send-btn">Send</button>
+            </div>
+        </div>
+    
+       
+    <script type="text/javascript">
+    document.getElementById("chat-send-btn").addEventListener("click", function() {
+        sendMessage();
+    });
+    
+    document.getElementById("chat-input").addEventListener("keydown", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    function sendMessage() {
+        let input = document.getElementById("chat-input").value;
+        if (input !== "") {
+            appendMessage(input, "user");
+            document.getElementById("chat-input").value = "";
+            setTimeout(function() {
+                let reply = generateReply(input);
+                appendMessage(reply, "bot");
+            }, 500);
+        }
+    }
+    
+    function generateReply(input) {
+        input = input.toLowerCase();
+        let reply = "";
+        if (input.includes("hi") || input.includes("hello")) {
+            // Reply to hi/hello
+            let replies = ["Hello!", "Hi there!", "Hey!", "Greetings!"];
+            reply = replies[Math.floor(Math.random() * replies.length)];
+        } else if (input.includes("name")) {
+            // Reply to name inquiry
+            reply = "My name is ChatBot.";
+        } else if (input.includes("how are you")) {
+            // Reply to how are you inquiry
+            let replies = ["I'm doing well, thank you!", "I'm functioning optimally!", "All good on this side!"];
+            reply = replies[Math.floor(Math.random() * replies.length)];
+        } else if (input.includes("help")) {
+            // Reply to help inquiry
+            reply = "Sure, I'm here to help. What do you need assistance with?";
+        } else {
+            // Default reply for other questions
+            let replies = ["I'm sorry, I don't have an answer for that.", "I'm not sure, can you provide more information?", "I'm unable to assist with that at the moment."];
+            reply = replies[Math.floor(Math.random() * replies.length)];
+        }
+        return reply;
+    }
+    
+    function appendMessage(message, sender) {
+        let chatList = document.getElementById("chat-list");
+        let listItem = document.createElement("li");
+        listItem.classList.add(sender);
+        listItem.textContent = message;
+        chatList.appendChild(listItem);
+    }
+    
+    </script>
+    </body>
+{% endblock %}
